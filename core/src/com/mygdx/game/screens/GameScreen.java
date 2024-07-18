@@ -9,13 +9,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.GameResources;
 import com.mygdx.game.GameSettings;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.camera.OrthographicCameraWithLeftRightState;
+import com.mygdx.game.components.GameUserInterface;
 
 public class GameScreen implements Screen {
 
     private  final MyGdxGame myGdxGame;
-    private OrthographicCamera camera;
+    private OrthographicCameraWithLeftRightState camera;
 
     private Texture background;
+    private GameUserInterface gameUserInterface;
 
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
@@ -24,9 +27,10 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
-        camera = new OrthographicCamera();
+        camera = new OrthographicCameraWithLeftRightState();
         camera.setToOrtho(false, GameSettings.SCR_WIDTH, GameSettings.SCR_HEIGHT);
         background = new Texture(GameResources.BACKGROUND_GAME_IMG_PATH);
+        gameUserInterface = new GameUserInterface(camera);
 
     }
 
@@ -38,14 +42,19 @@ public class GameScreen implements Screen {
         myGdxGame.batch.setProjectionMatrix(camera.combined);
 
         myGdxGame.batch.begin();
+
         myGdxGame.batch.draw(background, 0, 0, GameSettings.WORLD_WIDTH, GameSettings.WORLD_HEIGHT);
+
         myGdxGame.batch.end();
+
+        gameUserInterface.drawUI();
     }
 
 
     @Override
     public void dispose() {
         background.dispose();
+        gameUserInterface.dispose();
     }
 
     @Override

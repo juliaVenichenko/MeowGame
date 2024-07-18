@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ImageView extends View{
     Texture texture;
+
     public ImageView(float x, float y, String imagePath) {
         super(x, y);
         texture = new Texture(imagePath);
