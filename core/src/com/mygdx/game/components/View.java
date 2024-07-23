@@ -9,11 +9,13 @@ public class View implements Disposable {
     protected float width;
     protected float height;
 
+
     public View(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+
 
     }
     public View(float x, float y) {

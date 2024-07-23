@@ -22,7 +22,6 @@ public class MenuScreen implements Screen {
 
     private  final MyGdxGame myGdxGame;
     private Texture background;
-    private TextView titleView;
     private ImageView startButton;
     private Animation<TextureRegion> cat, enemy;
     private float curTime;
@@ -36,9 +35,10 @@ public class MenuScreen implements Screen {
     public void show() {
 
         myGdxGame.camera.update();
+
+
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
         background = new Texture(GameResources.BACKGROUND_MENU_IMG_PATH);
-        titleView = new TextView(myGdxGame.commonWhiteFont, 248, 125, "Нажмите, чтобы начать");
         startButton = new ImageView(255, 40, GameResources.BUTTON_START_IMG_PATH);
         initAnimation();
 
@@ -70,7 +70,7 @@ public class MenuScreen implements Screen {
         myGdxGame.batch.draw(enemy.getKeyFrame(curTime, true), GameSettings.SCR_WIDTH - 220, 100, 120, 120);
 
         startButton.draw(myGdxGame.batch);
-        titleView.draw(myGdxGame.batch);
+
 
         myGdxGame.batch.end();
     }
@@ -92,7 +92,7 @@ public class MenuScreen implements Screen {
     public void dispose() {
         background.dispose();
         startButton.dispose();
-        titleView.dispose();
+
     }
 
     @Override

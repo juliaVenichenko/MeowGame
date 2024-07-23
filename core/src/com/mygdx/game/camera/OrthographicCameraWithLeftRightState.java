@@ -9,9 +9,13 @@ public class OrthographicCameraWithLeftRightState extends OrthographicCamera {
         this.leftState = true;
     }
 
-//    public  void changeState(){
-//        leftState = !leftState;
-//    }
+    public  void changeState(){
+        leftState = !leftState;
+    }
+
+    public boolean isLeftState(){
+        return leftState;
+    }
 
     public void moveCameraToRight(float delta){
         position.x += delta;
@@ -20,6 +24,6 @@ public class OrthographicCameraWithLeftRightState extends OrthographicCamera {
 
     public void moveCameraToLeft(float delta){
         position.x -= delta;
-        leftState = false;
+        leftState = true;
     }
 }

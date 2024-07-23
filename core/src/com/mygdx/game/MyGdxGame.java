@@ -43,13 +43,17 @@ public class MyGdxGame extends Game {
 		setScreen(menuScreen);
 	}
 
+	public SpriteBatch getSpriteBatch() {
+		return batch;
+	}
+
 
 	@Override
 	public void dispose(){
 		super.dispose();
 		batch.dispose();
 
-//		menuScreen.dispose();
-//		gameScreen.dispose();
+		menuScreen.dispose();
+		gameScreen.dispose();
 	}
 }
