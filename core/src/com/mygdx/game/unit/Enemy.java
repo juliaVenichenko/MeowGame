@@ -2,8 +2,10 @@ package com.mygdx.game.unit;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.components.TextView;
 import com.mygdx.game.user.User;
@@ -12,14 +14,13 @@ import com.mygdx.game.util.AnimationUtil;
 
 import java.util.EnumMap;
 
-public class Enemy extends Unit{
+public class Enemy extends Unit {
 
-    public static final int TIME_TO_START = 10;
+    public static final int TIME_TO_START = 1; //50
     private int hp;
-    private MyGdxGame myGdxGame;
     private final BitmapFont font = new BitmapFont();
 
-    public enum StateEnemy{
+    public enum StateEnemy {
         STAY, GO_TO, ATTACK
     }
 
@@ -27,14 +28,12 @@ public class Enemy extends Unit{
     private float timeLastAttack;
     private EnumMap<StateEnemy, StateAttribute> stateAttrMap;
 
-    public Enemy (int hp, Rectangle destination, float x, float y){
-
+    public Enemy(int hp, Rectangle destination, float x, float y) {
         initStateMap();
+
         this.x = x;
         this.y = y;
         this.hp = hp;
-
-        //font = new TextView();
 
         isAlive = true;
 
@@ -44,16 +43,63 @@ public class Enemy extends Unit{
         timeLastAttack = -1;
     }
 
-    public void setTimeInState(float deltaTime){
+    @Override
+    public void initStateMap() {
+        textureAtlasArray = new Array<>();
+        stateAttrMap = new EnumMap<>(StateEnemy.class);
+
+        TextureAtlas atlas = new TextureAtlas("enemystay.atlas.txt");
+        stateAttrMap.put(
+                StateEnemy.STAY,
+                new StateAttribute(
+                        60f,
+                        60f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                2f
+                        ),
+                        0f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("enemy.atlas.txt");
+        stateAttrMap.put(
+                StateEnemy.GO_TO,
+                new StateAttribute(
+                        60f,
+                        60f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                1f
+                        ),
+                        0.2f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("enemyatack.atlas.txt");
+        stateAttrMap.put(
+                StateEnemy.ATTACK,
+                new StateAttribute(
+                        60f,
+                        60f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                0.75f
+                        ),
+                        0f
+                )
+        );
+        textureAtlasArray.add(atlas);
+    }
+
+    public void setTimeInState(float deltaTime) {
         this.timeInState += deltaTime;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return isAlive;
-    }
-
-    public TextureRegion getCurrentFrame(){
-        return stateAttrMap.get(currentState).animation.getKeyFrame(timeInState, true);
     }
 
     public void setCurrentState(StateEnemy currentState) {
@@ -61,23 +107,27 @@ public class Enemy extends Unit{
         timeInState = 0;
     }
 
-    public float getX(){
+    public TextureRegion getCurrentFrame() {
+        return stateAttrMap.get(currentState).animation.getKeyFrame(timeInState, true);
+    }
+
+    public float getX() {
         return x;
     }
 
-    public float getY(){
+    public float getY() {
         return y;
     }
 
-    public float getDeltaX(){
+    public float getDeltaX() {
         return deltaX;
     }
 
-    public float getDeltaY(){
+    public float getDeltaY() {
         return deltaY;
     }
 
-    public void getDmg(int dmg){
+    public void getDmg(int dmg) {
         hp -= dmg;
         if (hp <= 0) isAlive = false;
     }
@@ -88,12 +138,13 @@ public class Enemy extends Unit{
     }
 
     @Override
-    public void initStateMap() {
-        stateAttrMap = new EnumMap<>(StateEnemy.class);
+    public float getWidth() {
+        return stateAttrMap.get(currentState).width;
+    }
 
-        stateAttrMap.put(StateEnemy.STAY, new StateAttribute(60f, 60f, AnimationUtil.getAnimationFromAtlas("enemystay.atlas.txt", 2f), 0f));
-        stateAttrMap.put(StateEnemy.GO_TO, new StateAttribute(60f, 60f, AnimationUtil.getAnimationFromAtlas("enemy.atlas.txt", 1f), 0.2f));
-        stateAttrMap.put(StateEnemy.ATTACK, new StateAttribute(60f, 60f, AnimationUtil.getAnimationFromAtlas("enemyatack.atlas.txt", 0.75f), 0f));
+    @Override
+    public float getHeight() {
+        return stateAttrMap.get(currentState).height;
     }
 
     @Override
@@ -104,16 +155,19 @@ public class Enemy extends Unit{
 
     @Override
     public void nextXY() {
-        if (currentState != StateEnemy.STAY && currentState != StateEnemy.ATTACK && !destination.contains(x, y)){
+        if (currentState != StateEnemy.STAY
+                && currentState != StateEnemy.ATTACK
+                && !destination.contains(x, y)) {
             if (destination.y + destination.height / 2f > y) y += deltaY;
             if (destination.y + destination.height / 2f < y) y -= deltaY;
 
             if (destination.x + destination.width / 2f >= x) x += deltaX;
             if (destination.x + destination.width / 2f < x) x -= deltaX;
+
         } else {
-            switch (currentState){
+            switch (currentState) {
                 case STAY:
-                    if (timeInState > TIME_TO_START){
+                    if (timeInState > TIME_TO_START) {
                         setCurrentState(StateEnemy.GO_TO);
                         setDestination(destination);
                     }
@@ -122,21 +176,11 @@ public class Enemy extends Unit{
                     setCurrentState(StateEnemy.ATTACK);
                     break;
                 case ATTACK:
-                    if ((timeInState - timeLastAttack > 1 || timeLastAttack == -1) && isAlive){
+                    if ((timeInState - timeLastAttack > 1 || timeLastAttack == -1) && isAlive) {
                         User.getInstance().getDmg(10);
                         timeLastAttack = timeInState;
                     }
             }
         }
-    }
-
-    @Override
-    public float getWidth() {
-        return stateAttrMap.get(currentState).width;
-    }
-
-    @Override
-    public float getHeight() {
-        return stateAttrMap.get(currentState).height;
     }
 }

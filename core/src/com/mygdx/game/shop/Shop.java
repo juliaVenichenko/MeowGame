@@ -3,6 +3,7 @@ package com.mygdx.game.shop;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.components.TextView;
 
 public class Shop {
     private float x, y;
@@ -55,9 +56,10 @@ public class Shop {
             batch.draw(item.getTexture(), item.getX(), item.getY());
 
             //TODO: попробовать реализовать со шрифтом
-            font.draw(batch, "g:" + item.getPrice().getGold() + "\n" +
-                    "o:" + item.getPrice().getOre() + "\n" +
-                    "w:" + item.getPrice().getWood(), item.getX(), item.getY() + item.getHitBox().height + 50f);
+            font.draw(batch, "Need :" + "\n" +
+                    "Gold:" + item.getPrice().getGold() + "\n" +
+                    "Ore:" + item.getPrice().getOre() + "\n" +
+                    "Wood:" + item.getPrice().getWood(), item.getX(), item.getY() + item.getHitBox().height + 70f);
         }
     }
 

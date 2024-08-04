@@ -1,12 +1,10 @@
-package com.mygdx.game.screens;
+package com.mygdx.game.screens.Level1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -17,53 +15,44 @@ import com.mygdx.game.GameSettings;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.components.ButtonView;
 import com.mygdx.game.components.ImageView;
-import com.mygdx.game.components.TextView;
-import com.mygdx.game.managers.AudioManager;
 import com.mygdx.game.util.AnimationUtil;
 
-public class MenuScreen implements Screen {
-
-    private  final MyGdxGame myGdxGame;
+public class VictoryScreen1 implements Screen {
+    private MyGdxGame myGdxGame;
     private Texture background;
-    private ImageView startButton;
-    private Animation<TextureRegion> cat, enemy;
+    private ButtonView resumeButton;
+    private ButtonView menuButton;
+    private ImageView font;
+    private Animation<TextureRegion> cat;
     protected Array<TextureAtlas> textureAtlasArray;
     private float curTime;
 
-
-    public MenuScreen(MyGdxGame myGdxGame) {
+    public VictoryScreen1(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
-        background = new Texture(GameResources.BACKGROUND_MENU_IMG_PATH);
-        startButton = new ImageView(255, 40, GameResources.BUTTON_START_IMG_PATH);
-        initAnimation();
         curTime = 0;
     }
 
     @Override
     public void show() {
-
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
 
+        background = new Texture(GameResources.BACKGROUND_NOT_MEOW_IMG_PATH);
+        resumeButton = new ButtonView(125, 100, 240, 110, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL, "Продолжить");
+        menuButton = new ButtonView(475, 100, 240, 110, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL,"Меню");
+        font = new ImageView(200, 170, GameResources.VICTORY_IMG_PATH);
 
-
+        initAnimation();
 
     }
 
-    public void initAnimation() {
+    private void initAnimation() {
         textureAtlasArray = new Array<>();
 
-        TextureAtlas atlas = new TextureAtlas("enemyatack.atlas.txt");
-        enemy = AnimationUtil.getAnimationFromAtlas(
-                atlas,
-                4f
-        );
-        textureAtlasArray.add(atlas);
-
-        atlas = new TextureAtlas("catflysupersmall.atlas.txt");
+        TextureAtlas atlas = new TextureAtlas("catcarrysupersmall.atlas.txt");
         cat = AnimationUtil.getAnimationFromAtlas(
                 atlas,
-                4f
+                0.75f
         );
         textureAtlasArray.add(atlas);
 
@@ -71,56 +60,52 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         handleInput();
-
-        ScreenUtils.clear(Color.CLEAR);
-
-        float dTime = Gdx.graphics.getDeltaTime(); //Получаем delta
-        curTime += dTime; //Теперь знаем текущее время игры и можем передавать его для прорисовки спрайтов анимации (фреймов)
 
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
 
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        curTime += deltaTime;
+
+        ScreenUtils.clear(Color.CLEAR);
+
         myGdxGame.batch.begin();
 
         myGdxGame.batch.draw(background, 0, 0, GameSettings.SCR_WIDTH, GameSettings.SCR_HEIGHT);
+        resumeButton.draw(myGdxGame.batch);
+        menuButton.draw(myGdxGame.batch);
+        font.draw(myGdxGame.batch);
 
-        myGdxGame.batch.draw(cat.getKeyFrame(curTime, true), 100, 100, 80f, 200f);
-        myGdxGame.batch.draw(enemy.getKeyFrame(curTime, true), GameSettings.SCR_WIDTH - 220, 100, 120, 120);
-
-        startButton.draw(myGdxGame.batch);
-
+        myGdxGame.batch.draw(cat.getKeyFrame(curTime, true), 350, 10, 90f,79f); // 90 and 79
 
         myGdxGame.batch.end();
-
-
     }
 
     private void handleInput() {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (startButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                myGdxGame.setScreen(myGdxGame.levelsScreen);
-
+            if (resumeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                myGdxGame.setScreen(myGdxGame.gameScreen);
+                myGdxGame.audioManager.gameMusic.play();
             }
-//            if (exitButtonView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-//                Gdx.app.exit();
-//            }
+            if (menuButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                myGdxGame.setScreen(myGdxGame.menuScreen);
+            }
         }
     }
 
     @Override
     public void dispose() {
-
         background.dispose();
-        startButton.dispose();
+        resumeButton.dispose();
+        menuButton.dispose();
+        font.dispose();
 
         for (TextureAtlas atlas : textureAtlasArray) {
             atlas.dispose();
         }
-
     }
 
     @Override

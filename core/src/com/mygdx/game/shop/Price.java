@@ -5,10 +5,10 @@ public class Price {
     private final int wood;
     private final int ore;
 
-    public Price(int gold, int wood, int ore) {
+    public Price(int gold, int ore, int wood) {
         this.gold = gold;
-        this.wood = wood;
         this.ore = ore;
+        this.wood = wood;
     }
 
     public int getGold() {

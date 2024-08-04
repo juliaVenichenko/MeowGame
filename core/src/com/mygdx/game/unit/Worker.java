@@ -1,9 +1,12 @@
 package com.mygdx.game.unit;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameSettings;
+import com.mygdx.game.components.View;
 import com.mygdx.game.tower.CoreTower;
 import com.mygdx.game.tower.resource.Resource;
 import com.mygdx.game.user.User;
@@ -12,106 +15,203 @@ import com.mygdx.game.util.MathUtil;
 
 import java.util.EnumMap;
 
-public class Worker extends Unit{
-
+public class Worker extends Unit {
     private static final float WORKING_TIME = 5f;
-    //TODO: экземпляр класса Resource
     private Resource workingPlace;
-    //TODO: экземпляр класса CoreTower
     private final CoreTower coreTower;
 
-    public enum StateWorker{
-        FLY, FALL, SLEEP, CLICKED, GO_TO, WORK, GO_FROM
+    public enum StateWorker {
+        FLY,
+        SLEEP,
+        GO_TO,
+        GO_FROM,
+        FALL,
+        CLICKED,
+        WORK
     }
 
     private EnumMap<StateWorker, StateAttribute> stateAttrMap;
     private StateWorker currentState;
+
+    //нужно ли развернуть спрайт по оси Х (если движение в обратном направлении)
     private boolean rightPosition;
 
-    public Worker(CoreTower coreTower){
-        this.coreTower = coreTower;
+    public Worker(CoreTower coreTower) {
+
         initStateMap();
+        this.coreTower = coreTower;
         isAlive = true;
         rightPosition = true;
 
+        //важно состояние задавать до места назначения, т.к. в месте назначения
+        //высчитывается изменение координат для состояния, а скорости разные для
+        //разных состояний
         setCurrentState(StateWorker.FLY);
-        x = MathUtil.getRandomNumber(300, (int) (coreTower.getX() - getWidth()));
+
+        //Координаты спавна рабочих от 200 до 600 по Х
+        x = MathUtil.getRandomNumber(
+                300,
+                (int) (coreTower.getX() - getWidth())
+        );
         y = 480;
-        setDestination(x, 0); //к этой точке стремится котик
+
+        setDestination(x, 0);
     }
 
-
-    @Override
     public void initStateMap() {
+        textureAtlasArray = new Array<>();
         stateAttrMap = new EnumMap<>(StateWorker.class);
 
-        stateAttrMap.put(StateWorker.FLY, new StateAttribute(42f, 75f, AnimationUtil.getAnimationFromAtlas("catflysupersmall.atlas.txt", 2.5f), 0.5f));
-        stateAttrMap.put(StateWorker.FALL, new StateAttribute(37.8f, 67.5f, AnimationUtil.getAnimationFromAtlas("catfall.atlas.txt", 5.5f), 2f));
-        stateAttrMap.put(StateWorker.SLEEP, new StateAttribute(45f, 39.5f, AnimationUtil.getAnimationFromAtlas("catsleep.atlas.txt", 2f), 0f));
-        stateAttrMap.put(StateWorker.CLICKED, new StateAttribute(45f, 39.5f, AnimationUtil.getAnimationFromAtlas("catshine.atlas.txt", 2f), 0f));
-        stateAttrMap.put(StateWorker.GO_TO, new StateAttribute(35f, 35f, AnimationUtil.getAnimationFromAtlas("catwalk.atlas.txt", 1f), 0.75f));
-        stateAttrMap.put(StateWorker.WORK, new StateAttribute(35f, 35f, AnimationUtil.getAnimationFromAtlas("catwork.atlas.txt", 0.75f), 0f));
-        stateAttrMap.put(StateWorker.GO_FROM, new StateAttribute(35f, 35f, AnimationUtil.getAnimationFromAtlas("catcarrysupersmall.atlas.txt", 1f), 0.75f));
+        TextureAtlas atlas = new TextureAtlas("catflysupersmall.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.FLY,
+                new StateAttribute(
+                        42f,
+                        75f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                2.5f
+                        ),
+                        0.5f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catfall.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.FALL,
+                new StateAttribute(
+                        37.8f,
+                        67.5f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                5.5f
+                        ),
+                        2f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catsleep.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.SLEEP,
+                new StateAttribute(
+                        45f,
+                        39.5f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                2f
+                        ),
+                        0f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catshine.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.CLICKED,
+                new StateAttribute(
+                        45f,
+                        39.5f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                2f
+                        ),
+                        0f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catwalk.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.GO_TO,
+                new StateAttribute(
+                        35f,
+                        35f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                1f
+                        ),
+                        0.75f
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catwork.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.WORK,
+                new StateAttribute(
+                        35f,
+                        35f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                0.75f
+                        ),
+                        0
+                )
+        );
+        textureAtlasArray.add(atlas);
+
+        atlas = new TextureAtlas("catcarrysupersmall.atlas.txt");
+        stateAttrMap.put(
+                StateWorker.GO_FROM,
+                new StateAttribute(
+                        35f,
+                        35f,
+                        AnimationUtil.getAnimationFromAtlas(
+                                atlas,
+                                1f
+                        ),
+                        0.75f
+                )
+        );
+        textureAtlasArray.add(atlas);
     }
 
-    public void setCurrentState(StateWorker currentState){
+    public TextureRegion getCurrentFrame() {
+        return stateAttrMap.get(currentState).animation.getKeyFrame(timeInState, true);
+    }
+
+    public StateWorker getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(StateWorker currentState) {
         this.currentState = currentState;
         timeInState = 0;
     }
 
-    public StateWorker getCurrentState(){
-        return currentState;
+    public void setTimeInState(float deltaTimeInState) {
+        this.timeInState += deltaTimeInState;
     }
 
-    public TextureRegion getCurrentFrame(){
-        return stateAttrMap.get(currentState).animation.getKeyFrame(timeInState, true);
+    public float getWidth() {
+        return stateAttrMap.get(currentState).width;
     }
 
-    public  void setTimeInState(float deltaTime){
-        this.timeInState += deltaTime; //высчитываем время
+    public float getHeight() {
+        return stateAttrMap.get(currentState).height;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return isAlive;
     }
 
-    public void setWorkingPlace(Resource workingPlace){
+    public void setWorkingPlace(Resource workingPlace) {
         this.workingPlace = workingPlace;
     }
 
-    @Override
     public float getSpeed() {
         return stateAttrMap.get(currentState).speed;
     }
 
-    public boolean contains(float x, float y){
+    public boolean contains(float x, float y) {
         return x >= this.x && x <= this.x + getWidth()
                 && y >= this.y && y <= this.y + getHeight();
     }
 
-    public void clicked(){
-        switch (currentState){
-            case FLY:
-                if (isAlive){
-                    setCurrentState(StateWorker.FALL);
-
-                    float randY;
-                    if (y < GameSettings.SCR_HEIGHT / 2f)
-                        randY = MathUtil.getRandomNumber((int) getHeight(), (int) y);
-                    else
-                        randY = MathUtil.getRandomNumber((int) getHeight(), GameSettings.SCR_HEIGHT / 2);
-
-                    setDestination(x, randY);
-                }
-                break;
-            case SLEEP:
-                setCurrentState(StateWorker.CLICKED);
-                break;
-        }
-    }
-
-    @Override
     public void nextXY() {
+
         if (currentState != StateWorker.SLEEP && currentState != StateWorker.CLICKED)
             if (!destination.contains(x, y)) {
 
@@ -149,37 +249,56 @@ public class Worker extends Unit{
 
                         setCurrentState(StateWorker.GO_TO);
 
-                        switch (workingPlace.getType()){
+                        switch (workingPlace.getType()) {
                             case GOLD:
                                 User.getInstance().incGold(10);
-                                break;
-                            case WOOD:
-                                User.getInstance().incWood(15);
                                 break;
                             case ORE:
                                 User.getInstance().incOre(20);
                                 break;
+                            case WOOD:
+                                User.getInstance().incWood(15);
+                                break;
                         }
+
                         setDestination(workingPlace.getWorkBox());
                         break;
                 }
 
             }
+
     }
 
-    @Override
+    public void clicked() {
+        switch (currentState) {
+            case FLY:
+                if (isAlive) {
+                    setCurrentState(StateWorker.FALL);
+
+                    float randY;
+                    if (y < (float) GameSettings.SCR_HEIGHT / 2)
+                        randY = MathUtil.getRandomNumber((int) getHeight(), (int) y);
+                    else
+                        randY = MathUtil.getRandomNumber((int) getHeight(), GameSettings.SCR_HEIGHT / 2);
+
+                    setDestination(x, randY);
+                }
+                break;
+            case SLEEP:
+                setCurrentState(StateWorker.CLICKED);
+                break;
+        }
+    }
+
+
     public void draw(SpriteBatch batch) {
-        batch.draw(getCurrentFrame(), rightPosition ? x + getWidth() : x, y, rightPosition ? -getWidth() : getWidth(), getHeight()); // -getWidth() зеркалит фрейм
-    }
-
-    @Override
-    public float getWidth() {
-        return stateAttrMap.get(currentState).width;
-    }
-
-    @Override
-    public float getHeight() {
-        return stateAttrMap.get(currentState).height;
+        batch.draw(
+                getCurrentFrame(),
+                rightPosition ? x + getWidth() : x,
+                y,
+                rightPosition ? -getWidth() : getWidth(),
+                getHeight()
+        );
     }
 
     public void sleepSametime() {

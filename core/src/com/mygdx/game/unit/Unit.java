@@ -2,8 +2,10 @@ package com.mygdx.game.unit;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class Unit {
     protected boolean isAlive;
@@ -13,29 +15,25 @@ public abstract class Unit {
     protected float deltaY;
     protected Rectangle destination;
     protected float timeInState;
-    protected static class StateAttribute{
+    protected Array<TextureAtlas> textureAtlasArray;
+
+    protected static class StateAttribute {
         protected final float width;
         protected final float height;
         protected final Animation<TextureRegion> animation;
         protected final float speed;
 
-
-        public StateAttribute(float width, float height, Animation<TextureRegion> animation, float speed) {
+        public StateAttribute(
+                float width,
+                float height,
+                Animation<TextureRegion> animation,
+                float speed
+        ) {
             this.width = width;
             this.height = height;
             this.animation = animation;
             this.speed = speed;
         }
-    }
-
-    public void setDestination(Rectangle destination){
-        this.destination = destination;
-        calcDeltaXAndDeltaY();
-    }
-
-    public void setDestination(float destX, float destY){
-        this.destination = new Rectangle(destX - 12f, deltaY - 12f, 24, 24);
-        calcDeltaXAndDeltaY();
     }
 
     private void calcDeltaXAndDeltaY() {
@@ -48,10 +46,32 @@ public abstract class Unit {
         deltaY = (deltaS * Math.abs(y - (destination.y + destination.height / 2f))) / s;
     }
 
-    public abstract float getSpeed();
+    public void setDestination(float destinationX, float destinationY) {
+        destination = new Rectangle(destinationX - 12f, destinationY - 12f, 24f, 24f);
+        calcDeltaXAndDeltaY();
+    }
+
+    public void setDestination(Rectangle destination) {
+        this.destination = destination;
+        calcDeltaXAndDeltaY();
+    }
+
+    public void dispose() {
+        if (textureAtlasArray != null)
+            for (TextureAtlas atlas : textureAtlasArray) {
+                atlas.dispose();
+            }
+    }
+
     public abstract void initStateMap();
+
+    public abstract float getSpeed();
+
     public abstract void draw(SpriteBatch batch);
-    public abstract void nextXY();
+
     public abstract float getWidth();
+
     public abstract float getHeight();
+
+    public abstract void nextXY();
 }

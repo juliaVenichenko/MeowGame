@@ -4,11 +4,12 @@ import com.mygdx.game.shop.Item;
 import com.mygdx.game.shop.Price;
 
 public class User {
-    private int gold;
-    private int wood;
-    private int ore;
-    private int hp = 100;
+    public int gold;
+    public int wood;
+    public int ore;
+    public int hp = 100;
     private static User instance;
+
 
     private User(){}
 
@@ -21,14 +22,15 @@ public class User {
 
     public String fullInfo(){
         return "Hp : " + hp + "\n" +
+                "Ore : " + ore + "\n" +
                 "Gold : " + gold + "\n" +
-                "Wood : " + wood + "\n" +
-                "Ore : " + ore + "\n";
+                "Wood : " + wood + "\n";
     }
 
     public void getDmg(int dmg){
         User.getInstance().hp -= dmg;
     }
+
 
     public void incOre(int ore){
         User.getInstance().ore += ore;
@@ -49,7 +51,7 @@ public class User {
     public void buyItem(Item curChoice){
         Price price = curChoice.getPrice();
         gold -= price.getGold();
-        wood -= price.getWood();
         ore -= price.getOre();
+        wood -= price.getWood();
     }
 }
