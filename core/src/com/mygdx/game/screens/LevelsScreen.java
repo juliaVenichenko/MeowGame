@@ -65,6 +65,7 @@ public class LevelsScreen implements Screen {
             if ((level1.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) || (level2.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) || (level3.isHit(myGdxGame.touch.x, myGdxGame.touch.y))){
                 myGdxGame.audioManager.menuMusic.stop();
                 myGdxGame.audioManager.gameMusic.play();
+                myGdxGame.audioManager.clickSound.play(0.2f);
             }
         }
     }
@@ -77,6 +78,7 @@ public class LevelsScreen implements Screen {
         level3.dispose();
         myGdxGame.audioManager.menuMusic.dispose();
         myGdxGame.audioManager.gameMusic.dispose();
+        myGdxGame.audioManager.clickSound.dispose();
     }
 
 

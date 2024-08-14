@@ -13,15 +13,21 @@ public class GameResources {
     public static final String BUTTON_START_IMG_PATH = "button_start.png";
     public static final String BUTTON_RIGHT_IMG_PATH = "button_to_right.png";
     public static final String BUTTON_LEFT_IMG_PATH = "button_to_left.png";
+    public static final String BUTTON_HOME = "buttonHome.png";
+    public static final String BUTTON_SOUNDS = "buttonSounds.png";
     public static final String BUTTON_UNIVERSAL = "button_universal.png";
     public static final String SPARK_IMG_PATH = "spark.png";
     public static final String VICTORY_IMG_PATH = "victory.png";
+
 
 
     //music
     public static final String MENU_MUSIC = "music/menuMusic.mp3";
     public static final String GAME_MUSIC = "music/gameMusic.mp3";
     public static final String MEOW_SOUND = "music/meowSound.mp3";
+    public static final String GAME_OVER_SOUND = "music/GameOverSound.mp3";
+    public static final String VICTORY_SOUND = "music/victorySound.mp3";
+    public static final String CLICK_SOUND = "music/clickSound.mp3";
 
     public static final String FONT_PATH = "fonts/ofont.ru_Montserrat.ttf";
 }

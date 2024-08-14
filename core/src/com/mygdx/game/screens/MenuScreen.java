@@ -45,9 +45,6 @@ public class MenuScreen implements Screen {
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
 
-
-
-
     }
 
     public void initAnimation() {
@@ -103,6 +100,7 @@ public class MenuScreen implements Screen {
 
             if (startButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                 myGdxGame.setScreen(myGdxGame.levelsScreen);
+                myGdxGame.audioManager.clickSound.play(0.2f);
 
             }
 //            if (exitButtonView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
@@ -116,6 +114,7 @@ public class MenuScreen implements Screen {
 
         background.dispose();
         startButton.dispose();
+        myGdxGame.audioManager.clickSound.dispose();
 
         for (TextureAtlas atlas : textureAtlasArray) {
             atlas.dispose();

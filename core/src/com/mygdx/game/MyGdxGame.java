@@ -30,8 +30,8 @@ public class MyGdxGame extends Game {
 	public MenuScreen menuScreen;
 	public GameScreen gameScreen;
 	public LevelsScreen levelsScreen;
-	public RestartScreen1 restartScreen;
-	public VictoryScreen1 victoryScreen;
+	public RestartScreen1 restartScreen1;
+	public VictoryScreen1 victoryScreen1;
 	public BitmapFont commonWhiteFont;
 	public AudioManager audioManager;
 	@Override
@@ -45,8 +45,8 @@ public class MyGdxGame extends Game {
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
 		levelsScreen = new LevelsScreen(this);
-		restartScreen = new RestartScreen1(this);
-		victoryScreen = new VictoryScreen1(this);
+		restartScreen1 = new RestartScreen1(this);
+		victoryScreen1 = new VictoryScreen1(this);
 		audioManager = new AudioManager();
 
 		commonWhiteFont = FontBuilder.generate(25, Color.WHITE, GameResources.FONT_PATH);
@@ -66,8 +66,8 @@ public class MyGdxGame extends Game {
 		menuScreen.dispose();
 		gameScreen.dispose();
 		levelsScreen.dispose();
-		restartScreen.dispose();
-		victoryScreen.dispose();
+		restartScreen1.dispose();
+		victoryScreen1.dispose();
 
 	}
 }

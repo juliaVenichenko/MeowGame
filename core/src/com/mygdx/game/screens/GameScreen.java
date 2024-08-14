@@ -13,6 +13,7 @@ import com.mygdx.game.GameSettings;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.camera.OrthographicCameraWithLeftRightState;
 import com.mygdx.game.components.GameUserInterface;
+import com.mygdx.game.components.ImageView;
 import com.mygdx.game.screens.Level1.RestartScreen1;
 import com.mygdx.game.shop.Item;
 import com.mygdx.game.shop.Price;
@@ -36,6 +37,8 @@ public class GameScreen implements Screen {
     private Texture background;
     private Texture tmpTexture;
     private CoreTower coreTower;
+    private ImageView buttonHome;
+    private ImageView buttonSounds;
     private Array<Resource> resourceArray;
     private GameUserInterface gameUserInterface;
     private Array<Worker> workers;
@@ -70,6 +73,9 @@ public class GameScreen implements Screen {
                 170,
                 226
         );
+
+        buttonHome = new ImageView(0,425,GameResources.BUTTON_HOME);
+        buttonSounds = new ImageView(60,425,GameResources.BUTTON_SOUNDS);
 
         Resource resourceGold, resourceOre, resourceWood;
         resourceGold = new Resource( new Texture(GameResources.GOLD_TOWER), 50 - 25, 480 / 2f - 165 / 2f, 170, 119, ResourceType.GOLD);
@@ -126,8 +132,34 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void handleInput() {
+        if (Gdx.input.justTouched()) {
+            myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+            if (buttonHome.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                myGdxGame.setScreen(myGdxGame.menuScreen);
+                myGdxGame.audioManager.clickSound.play(0.2f);
+                myGdxGame.audioManager.gameMusic.stop();
+                myGdxGame.audioManager.menuMusic.play();
+            }
+        }
+    }
+
+    private void handleInputSounds() {
+        if (Gdx.input.justTouched()) {
+            myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+            if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                myGdxGame.audioManager.gameMusic.pause();
+            }
+        }
+    }
+
     @Override
     public void render(float delta) {
+        handleInput();
+        handleInputSounds();
+
         ScreenUtils.clear(Color.CLEAR);
 
         camera.update();
@@ -213,6 +245,8 @@ public class GameScreen implements Screen {
         myGdxGame.batch.begin();
 
         myGdxGame.batch.draw(background, 0, 0, GameSettings.SCR_WIDTH * 2, GameSettings.SCR_HEIGHT);
+        buttonHome.draw(myGdxGame.batch);
+        buttonSounds.draw(myGdxGame.batch);
 
         if (camera.isLeftState()) {
             coreTower.draw(myGdxGame.batch);
@@ -259,18 +293,18 @@ public class GameScreen implements Screen {
             (User.getInstance().gold) = 0;
             (User.getInstance().wood) = 0;
 
-            myGdxGame.setScreen(myGdxGame.restartScreen);
+            myGdxGame.setScreen(myGdxGame.restartScreen1);
 
             isGameOver = false;
 
             myGdxGame.audioManager.gameMusic.stop();
-            //TODO: добавить звук поражения
+            myGdxGame.audioManager.gameOverSound.play();
         }
 
         if (!enemy.isAlive()){
             isGameOver = false;
-            myGdxGame.setScreen(myGdxGame.victoryScreen);
-            //TODO: добавить звук выйгрыша
+            myGdxGame.setScreen(myGdxGame.victoryScreen1);
+            myGdxGame.audioManager.victorySound.play();
         }
 
 
@@ -286,8 +320,16 @@ public class GameScreen implements Screen {
 
         gameUserInterface.dispose();
         tmpTexture.dispose();
+
+        buttonHome.dispose();
+        buttonSounds.dispose();
+
         myGdxGame.audioManager.meowSound.dispose();
         myGdxGame.audioManager.gameMusic.dispose();
+        myGdxGame.audioManager.gameOverSound.dispose();
+        myGdxGame.audioManager.victorySound.dispose();
+        myGdxGame.audioManager.menuMusic.dispose();
+        myGdxGame.audioManager.clickSound.dispose();
 
         for (Resource resource : resourceArray) {
             resource.dispose();

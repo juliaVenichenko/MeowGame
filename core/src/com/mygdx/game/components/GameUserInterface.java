@@ -38,6 +38,7 @@ public class GameUserInterface {
             public void clicked(InputEvent event, float x, float y) {
                 if (camera.position.x < GameSettings.WORLD_WIDTH - GameSettings.SCR_WIDTH / 2f);
                 camera.moveCameraToRight(GameSettings.SCR_WIDTH);
+
             }
         });
         buttonLeft.addListener(new ClickListener(){

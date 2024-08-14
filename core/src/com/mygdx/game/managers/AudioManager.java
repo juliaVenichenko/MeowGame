@@ -9,6 +9,9 @@ public class AudioManager {
     public Music menuMusic;
     public Music gameMusic;
     public Sound meowSound;
+    public Sound gameOverSound;
+    public Sound victorySound;
+    public Sound clickSound;
     public Sound shotSound;
 
     public AudioManager(){
@@ -17,13 +20,15 @@ public class AudioManager {
 
 //        shotSound = Gdx.audio.newSound(Gdx.files.internal(""));
         meowSound = Gdx.audio.newSound(Gdx.files.internal(GameResources.MEOW_SOUND));
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal(GameResources.GAME_OVER_SOUND));
+        victorySound = Gdx.audio.newSound(Gdx.files.internal(GameResources.VICTORY_SOUND));
+        clickSound = Gdx.audio.newSound(Gdx.files.internal(GameResources.CLICK_SOUND));
 
         menuMusic.setVolume(0.5f);
         menuMusic.setLooping(true);
 
         gameMusic.setVolume(0.5f);
         gameMusic.setLooping(true);
-
 
 
     }
