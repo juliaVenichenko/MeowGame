@@ -137,11 +137,14 @@ public class GameScreen implements Screen {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (buttonHome.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                myGdxGame.setScreen(myGdxGame.menuScreen);
-                myGdxGame.audioManager.clickSound.play(0.2f);
-                myGdxGame.audioManager.gameMusic.stop();
-                myGdxGame.audioManager.menuMusic.play();
+            if (camera.isLeftState()){
+
+                if (buttonHome.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                    myGdxGame.setScreen(myGdxGame.menuScreen);
+                    myGdxGame.audioManager.clickSound.play(0.2f);
+                    myGdxGame.audioManager.gameMusic.stop();
+                    myGdxGame.audioManager.menuMusic.play();
+                }
             }
         }
     }
@@ -150,13 +153,17 @@ public class GameScreen implements Screen {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause != isPause()) {
-                myGdxGame.audioManager.gameMusic.pause();
-                isPause = true;
-            }
-            else if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause == isPause()){
-                myGdxGame.audioManager.gameMusic.play();
-                isPause = false;
+            if (camera.isLeftState()){
+
+                if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause != isPause()) {
+                    myGdxGame.audioManager.gameMusic.pause();
+                    isPause = true;
+                }
+
+                else if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause == isPause()){
+                    myGdxGame.audioManager.gameMusic.play();
+                    isPause = false;
+                }
             }
         }
     }
