@@ -15,6 +15,7 @@ public class GameResources {
     public static final String BUTTON_LEFT_IMG_PATH = "button_to_left.png";
     public static final String BUTTON_HOME = "buttonHome.png";
     public static final String BUTTON_SOUNDS = "buttonSounds.png";
+    public static final String BUTTON_SOUNDS_PAUSE = "buttonSoundsPause.png";
     public static final String BUTTON_UNIVERSAL = "button_universal.png";
     public static final String SPARK_IMG_PATH = "spark.png";
     public static final String VICTORY_IMG_PATH = "victory.png";

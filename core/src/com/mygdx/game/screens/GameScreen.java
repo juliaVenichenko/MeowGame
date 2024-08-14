@@ -52,6 +52,7 @@ public class GameScreen implements Screen {
     private float curTime;
     private float prevTime;
     boolean isGameOver = false;
+    boolean isPause = false;
 
 
     public GameScreen(MyGdxGame myGdxGame) {
@@ -149,10 +150,18 @@ public class GameScreen implements Screen {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+            if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause != isPause()) {
                 myGdxGame.audioManager.gameMusic.pause();
+                isPause = true;
+            }
+            else if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause == isPause()){
+                myGdxGame.audioManager.gameMusic.play();
+                isPause = false;
             }
         }
+    }
+    public boolean isPause() {
+        return isPause = true;
     }
 
     @Override
@@ -246,6 +255,8 @@ public class GameScreen implements Screen {
 
         myGdxGame.batch.draw(background, 0, 0, GameSettings.SCR_WIDTH * 2, GameSettings.SCR_HEIGHT);
         buttonHome.draw(myGdxGame.batch);
+
+
         buttonSounds.draw(myGdxGame.batch);
 
         if (camera.isLeftState()) {
