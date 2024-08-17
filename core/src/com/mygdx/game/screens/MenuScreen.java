@@ -25,7 +25,9 @@ public class MenuScreen implements Screen {
 
     private  final MyGdxGame myGdxGame;
     private Texture background;
+
     private ImageView startButton;
+    private ButtonView exitButton;
     private Animation<TextureRegion> cat, enemy;
     protected Array<TextureAtlas> textureAtlasArray;
     private float curTime;
@@ -34,7 +36,8 @@ public class MenuScreen implements Screen {
     public MenuScreen(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
         background = new Texture(GameResources.BACKGROUND_MENU_IMG_PATH);
-        startButton = new ImageView(255, 40, GameResources.BUTTON_START_IMG_PATH);
+        startButton = new ImageView(255, 150, GameResources.BUTTON_START_IMG_PATH);
+
         initAnimation();
         curTime = 0;
     }
@@ -44,6 +47,8 @@ public class MenuScreen implements Screen {
 
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
+
+        exitButton = new ButtonView(255, 40, 306, 73, GameResources.EXIT_GAME); //307, 90
 
     }
 
@@ -87,6 +92,7 @@ public class MenuScreen implements Screen {
         myGdxGame.batch.draw(enemy.getKeyFrame(curTime, true), GameSettings.SCR_WIDTH - 220, 100, 120, 120);
 
         startButton.draw(myGdxGame.batch);
+        exitButton.draw(myGdxGame.batch);
 
 
         myGdxGame.batch.end();
@@ -103,9 +109,9 @@ public class MenuScreen implements Screen {
                 myGdxGame.audioManager.clickSound.play(0.2f);
 
             }
-//            if (exitButtonView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-//                Gdx.app.exit();
-//            }
+            if (exitButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                Gdx.app.exit();
+            }
         }
     }
 
@@ -114,6 +120,7 @@ public class MenuScreen implements Screen {
 
         background.dispose();
         startButton.dispose();
+        exitButton.dispose();
         myGdxGame.audioManager.clickSound.dispose();
 
         for (TextureAtlas atlas : textureAtlasArray) {

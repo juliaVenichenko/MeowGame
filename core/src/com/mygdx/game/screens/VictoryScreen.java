@@ -38,7 +38,7 @@ public abstract class VictoryScreen implements Screen {
         this.curTime = curTime;
 
         background = new Texture(GameResources.BACKGROUND_NOT_MEOW_IMG_PATH);
-        font = new ImageView(200, 170, GameResources.VICTORY_IMG_PATH);
+        font = new ImageView(170, 150, GameResources.VICTORY_IMG_PATH);
     }
 
     protected void initAnimation() {

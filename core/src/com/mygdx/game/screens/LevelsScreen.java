@@ -30,9 +30,9 @@ public class LevelsScreen implements Screen {
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
 
         background = new Texture(GameResources.BACKGROUND_MENU_IMG_PATH);
-        level1 = new ButtonView(275, 200, 70, 70, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL, "1");
-        level2 = new ButtonView(375, 200, 70, 70, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL,"2");
-        level3 = new ButtonView(475, 200, 70, 70, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL,"3");
+        level1 = new ButtonView(240, 170, 140, 100, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL, "1");
+        level2 = new ButtonView(450, 170, 140, 100, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL_GRAY,"2");
+        level3 = new ButtonView(240, 70, 140, 100, myGdxGame.commonWhiteFont, GameResources.BUTTON_UNIVERSAL_GRAY,"3");
     }
 
 
@@ -58,11 +58,8 @@ public class LevelsScreen implements Screen {
         if (Gdx.input.justTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (level1.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+            if ((level1.isHit(myGdxGame.touch.x, myGdxGame.touch.y))){  // || (level2.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) || (level3.isHit(myGdxGame.touch.x, myGdxGame.touch.y))
                 myGdxGame.setScreen(myGdxGame.gameScreen);
-            }
-
-            if ((level1.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) || (level2.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) || (level3.isHit(myGdxGame.touch.x, myGdxGame.touch.y))){
                 myGdxGame.audioManager.menuMusic.stop();
                 myGdxGame.audioManager.gameMusic.play();
                 myGdxGame.audioManager.clickSound.play(0.2f);

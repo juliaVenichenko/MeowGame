@@ -78,6 +78,7 @@ public class GameScreen implements Screen {
         buttonHome = new ImageView(0,425,GameResources.BUTTON_HOME);
         buttonSounds = new ImageView(60,425,GameResources.BUTTON_SOUNDS);
 
+
         Resource resourceGold, resourceOre, resourceWood;
         resourceGold = new Resource( new Texture(GameResources.GOLD_TOWER), 50 - 25, 480 / 2f - 165 / 2f, 170, 119, ResourceType.GOLD);
         resourceOre = new Resource(new Texture(GameResources.ORE_TOWER),50, 480 - 150 - 35, 146, 119, ResourceType.ORE);
@@ -158,11 +159,13 @@ public class GameScreen implements Screen {
                 if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause != isPause()) {
                     myGdxGame.audioManager.gameMusic.pause();
                     isPause = true;
+                    myGdxGame.audioManager.clickSound.play(0.2f);
                 }
 
                 else if (buttonSounds.isHit(myGdxGame.touch.x, myGdxGame.touch.y) && isPause == isPause()){
                     myGdxGame.audioManager.gameMusic.play();
                     isPause = false;
+                    myGdxGame.audioManager.clickSound.play(0.2f);
                 }
             }
         }
@@ -261,13 +264,13 @@ public class GameScreen implements Screen {
         myGdxGame.batch.begin();
 
         myGdxGame.batch.draw(background, 0, 0, GameSettings.SCR_WIDTH * 2, GameSettings.SCR_HEIGHT);
-        buttonHome.draw(myGdxGame.batch);
-
-
-        buttonSounds.draw(myGdxGame.batch);
 
         if (camera.isLeftState()) {
+
             coreTower.draw(myGdxGame.batch);
+            buttonHome.draw(myGdxGame.batch);
+            buttonSounds.draw(myGdxGame.batch);
+
             for (Resource resource : resourceArray) {
                 resource.draw(myGdxGame.batch);
             }
@@ -323,6 +326,7 @@ public class GameScreen implements Screen {
             isGameOver = false;
             myGdxGame.setScreen(myGdxGame.victoryScreen1);
             myGdxGame.audioManager.victorySound.play();
+            myGdxGame.audioManager.gameMusic.stop();
         }
 
 
@@ -341,6 +345,7 @@ public class GameScreen implements Screen {
 
         buttonHome.dispose();
         buttonSounds.dispose();
+
 
         myGdxGame.audioManager.meowSound.dispose();
         myGdxGame.audioManager.gameMusic.dispose();

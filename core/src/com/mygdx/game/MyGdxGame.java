@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.managers.AudioManager;
 import com.mygdx.game.screens.GameScreen;
+import com.mygdx.game.screens.Level1.DemoMessage;
 import com.mygdx.game.screens.LevelsScreen;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.screens.Level1.RestartScreen1;
@@ -32,6 +33,7 @@ public class MyGdxGame extends Game {
 	public LevelsScreen levelsScreen;
 	public RestartScreen1 restartScreen1;
 	public VictoryScreen1 victoryScreen1;
+	public DemoMessage demoMessage;
 	public BitmapFont commonWhiteFont;
 	public AudioManager audioManager;
 	@Override
@@ -47,6 +49,7 @@ public class MyGdxGame extends Game {
 		levelsScreen = new LevelsScreen(this);
 		restartScreen1 = new RestartScreen1(this);
 		victoryScreen1 = new VictoryScreen1(this);
+		demoMessage = new DemoMessage(this);
 		audioManager = new AudioManager();
 
 		commonWhiteFont = FontBuilder.generate(25, Color.WHITE, GameResources.FONT_PATH);
@@ -68,6 +71,7 @@ public class MyGdxGame extends Game {
 		levelsScreen.dispose();
 		restartScreen1.dispose();
 		victoryScreen1.dispose();
+		demoMessage.dispose();
 
 	}
 }

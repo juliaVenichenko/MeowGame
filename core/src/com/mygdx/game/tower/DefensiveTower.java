@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameResources;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.unit.Enemy;
 import com.mygdx.game.util.AnimationUtil;
 
@@ -60,17 +61,18 @@ public class DefensiveTower extends Tower {
         private final Animation<TextureRegion> animations;
         private final Enemy enemy;
 
+
         public Shot(Enemy enemy) {
             this.enemy = enemy;
             this.x = DefensiveTower.this.x + DefensiveTower.this.width / 2f;
             this.y = DefensiveTower.this.y + DefensiveTower.this.height / 2f;
             animations = AnimationUtil.getAnimationFromTexture(
                     new Texture(GameResources.SPARK_IMG_PATH),
-                    5,
+                    4,
                     1,
                     0.5f
             );
-            width = new Texture(GameResources.SPARK_IMG_PATH).getWidth() / 5f;
+            width = new Texture(GameResources.SPARK_IMG_PATH).getWidth() / 4f;
             height = new Texture(GameResources.SPARK_IMG_PATH).getHeight();
             setDestination(
                     enemy.getX() + enemy.getWidth() / 4f + enemy.getDeltaX() * 50,
@@ -82,6 +84,7 @@ public class DefensiveTower extends Tower {
         public void setDestination(float destinationX, float destinationY) {
             target = new Rectangle(destinationX - 12f, destinationY - 12f, 24f, 24f);
             calcDeltaXAndDeltaY();
+
         }
 
         private void calcDeltaXAndDeltaY() {
