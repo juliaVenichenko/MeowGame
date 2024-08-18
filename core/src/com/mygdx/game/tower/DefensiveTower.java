@@ -75,8 +75,8 @@ public class DefensiveTower extends Tower {
             width = new Texture(GameResources.SPARK_IMG_PATH).getWidth() / 4f;
             height = new Texture(GameResources.SPARK_IMG_PATH).getHeight();
             setDestination(
-                    enemy.getX() + enemy.getWidth() / 4f + enemy.getDeltaX() * 60,
-                    enemy.getY() + enemy.getHeight() / 2f + enemy.getDeltaY() * 60
+                    enemy.getX() + enemy.getWidth() / 4f + enemy.getDeltaX() * 50,
+                    enemy.getY() + enemy.getHeight() / 2f + enemy.getDeltaY() * 50
             );
 
         }
