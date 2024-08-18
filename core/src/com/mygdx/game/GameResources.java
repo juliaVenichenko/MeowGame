@@ -11,8 +11,8 @@ public class GameResources {
     public static final String SHOP_TOWER = "towerShop50x50.png";
     public static final String TOWER_IMG_PATH = "tower.png";
     public static final String BUTTON_START_IMG_PATH = "button_start.png";
-    public static final String BUTTON_RIGHT_IMG_PATH = "button_to_right.png";
-    public static final String BUTTON_LEFT_IMG_PATH = "button_to_left.png";
+    public static final String BUTTON_RIGHT_IMG_PATH = "button_right.png";
+    public static final String BUTTON_LEFT_IMG_PATH = "button_left.png";
     public static final String BUTTON_HOME = "buttonHome.png";
     public static final String BUTTON_SOUNDS = "buttonSounds.png";
     public static final String BUTTON_EXIT = "buttonExit.png";

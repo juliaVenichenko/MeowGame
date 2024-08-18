@@ -25,7 +25,7 @@ public class DefensiveTower extends Tower {
         super(x, y, width, height, texture, new Rectangle(x, y, width, height));
 
         shotArray = new Array<>();
-        range = new Rectangle(x, y - 200f, hitBox.width, 200f + hitBox.height + 200f);
+        range = new Rectangle(x, y - 200f, hitBox.width + 25f, 200f + hitBox.height + 200f);
         lastShot = -1;
     }
 
@@ -36,13 +36,13 @@ public class DefensiveTower extends Tower {
 
     public void draw(SpriteBatch batch, Enemy enemy, float curTime) {
         batch.draw(texture, x, y, width, height);
-
+//        batch.draw(new Texture("tmp.png"), range.x, range.y, range.width, range.height);
         if (curTime - lastShot > 5 && range.contains(enemy.getX(), enemy.getY()) && enemy.isAlive()) {
             lastShot = curTime;
             shotArray.add(new Shot(enemy));
         }
         for (Shot shot : shotArray) {
-            if (!shot.inTarget && enemy.isAlive()) {
+            if (!shot.inTarget) {
                 batch.draw(shot.getCurrentFrame(curTime), shot.x, shot.y);
                 shot.nextXY();
             }
@@ -61,7 +61,6 @@ public class DefensiveTower extends Tower {
         private final Animation<TextureRegion> animations;
         private final Enemy enemy;
 
-
         public Shot(Enemy enemy) {
             this.enemy = enemy;
             this.x = DefensiveTower.this.x + DefensiveTower.this.width / 2f;
@@ -75,8 +74,8 @@ public class DefensiveTower extends Tower {
             width = new Texture(GameResources.SPARK_IMG_PATH).getWidth() / 4f;
             height = new Texture(GameResources.SPARK_IMG_PATH).getHeight();
             setDestination(
-                    enemy.getX() + enemy.getWidth() / 4f + enemy.getDeltaX() * 40,
-                    enemy.getY() + enemy.getHeight() / 2f + enemy.getDeltaY() * 40
+                    enemy.getX() + enemy.getWidth() / 4f + enemy.getDeltaX() * 60,
+                    enemy.getY() + enemy.getHeight() / 2f + enemy.getDeltaY() * 60
             );
 
         }
@@ -84,7 +83,6 @@ public class DefensiveTower extends Tower {
         public void setDestination(float destinationX, float destinationY) {
             target = new Rectangle(destinationX - 12f, destinationY - 12f, 24f, 24f);
             calcDeltaXAndDeltaY();
-
         }
 
         private void calcDeltaXAndDeltaY() {
@@ -92,7 +90,7 @@ public class DefensiveTower extends Tower {
                     (x - (target.x + target.width / 2f)) * (x - (target.x + target.width / 2f)) +
                             (y - (target.y + target.height / 2f)) * (y - (target.y + target.height / 2f))
             );
-            float deltaS = s / 60f;
+            float deltaS = s / 40f;
             deltaX = (deltaS * Math.abs(x - (target.x + target.width / 2f))) / s;
             deltaY = (deltaS * Math.abs(y - (target.y + target.height / 2f))) / s;
         }
