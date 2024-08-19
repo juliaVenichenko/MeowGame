@@ -29,7 +29,7 @@ public class CoreTower extends Tower {
         batch.draw(texture, x, y, width, height);
 
         //debug
-        batch.draw(textureDebug, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-        batch.draw(textureDebug, storageBox.x, storageBox.y, storageBox.width, storageBox.height);
+//        batch.draw(textureDebug, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//        batch.draw(textureDebug, storageBox.x, storageBox.y, storageBox.width, storageBox.height);
     }
 }

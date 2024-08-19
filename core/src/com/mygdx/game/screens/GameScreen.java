@@ -324,7 +324,7 @@ public class GameScreen implements Screen {
 
         if (!enemy.isAlive()){
             isGameOver = false;
-            myGdxGame.setScreen(myGdxGame.victoryScreen1);
+            myGdxGame.setScreen(myGdxGame.demoMessage);
             myGdxGame.audioManager.victorySound.play();
             myGdxGame.audioManager.gameMusic.stop();
         }

@@ -38,7 +38,7 @@ public class Resource extends Tower {
         batch.draw(texture, x, y, width, height);
 
         //debug
-        batch.draw(textureDebug, workBox.x, workBox.y, workBox.width, workBox.height);
+//        batch.draw(textureDebug, workBox.x, workBox.y, workBox.width, workBox.height);
     }
 
 }
